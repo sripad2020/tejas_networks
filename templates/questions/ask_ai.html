@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ===== Base Styles ===== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        /* ===== Particles Background ===== */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: transparent;
+        }
+
+        /* ===== Chatbot Container ===== */
+        .chatbot-container {
+            width: 90%;
+            max-width: 600px;
+            height: 700px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 40px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        /* ===== Chatbot Header ===== */
+        .chatbot-header {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* ===== Chatbot Body ===== */
+        .chatbot-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Custom Scrollbar */
+        .chatbot-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        .chatbot-body::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 10px;
+        }
+
+        /* ===== Message Styles ===== */
+        .chat-message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 15px;
+            line-height: 1.5;
+            animation: messageFadeIn 0.3s ease-out;
+        }
+
+        .chat-message.user {
+            align-self: flex-end;
+            background: rgba(76, 175, 80, 0.8);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chat-message.bot {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.15);
+            border-bottom-left-radius: 5px;
+        }
+
+        .chat-message.bot li {
+            margin: 8px 0;
+            padding-left: 5px;
+        }
+
+        /* ===== Chatbot Footer ===== */
+        .chatbot-footer {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .chatbot-footer input {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-footer input:focus {
+            border-color: rgba(76, 175, 80, 0.8);
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+
+        .chatbot-footer button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 30px;
+            background: #4CAF50;
+            color: white;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-footer button:hover {
+            background: #43A047;
+            transform: translateY(-2px);
+        }
+
+        /* ===== Services Section ===== */
+        .services {
+            width: 90%;
+            max-width: 1200px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .services h2 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: #4CAF50;
+            text-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .service-card i {
+            font-size: 40px;
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+
+        .service-card h3 {
+            font-size: 22px;
+            margin: 15px 0;
+            color: white;
+        }
+
+        .service-card p {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+        }
+
+        .service-card a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        /* ===== Animations ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes messageFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== Responsive Design ===== */
+        @media (max-width: 768px) {
+            .chatbot-container {
+                height: 80vh;
+                margin-bottom: 20px;
+            }
+
+            .services h2 {
+                font-size: 28px;
+            }
+
+            .service-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+
+
+    <form id="legalbotForm">
+        <div class="chatbot-container">
+            <div class="chatbot-header">
+                <i class="fas fa- scale"></i> Ask AI</div>
+            <div class="chatbot-body" id="chatbotBody">
+                <div class="chat-message bot">
+                    Hello! I'm your legal education assistant. How can I help you today?
+                </div>
+            </div>
+            <div class="chatbot-footer">
+                <input type="text" name="legal_bot" id="chatbotInput" placeholder="Type your legal question..." required>
+                <button type="submit" id="sendButton">
+                    <i class="fas fa-paper-plane"></i> Send
+                </button>
+            </div>
+        </div>
+    </form>
+
+            <div class="service-card">
+                <i class="fas fa-home"></i>
+                <p>Return to the homepage.</p>
+                <a href="/"><h3>Home</h3></a>
+            </div>
+
+    <!-- Particles.js Script -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Initialize particles.js
+        particlesJS("particles-js", {
+            particles: {
+                number: { value: 60, density: { enable: true, value_area: 800 } },
+                color: { value: "#ffffff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5, random: true },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#ffffff",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out"
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "grab" },
+                    onclick: { enable: true, mode: "push" },
+                    resize: true
+                }
+            }
+        });
+
+        // Function to append a message to the chat
+        function appendMessage(sender, message, isPoints = false) {
+            const chatbotBody = document.getElementById('chatbotBody');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', sender);
+
+            if (isPoints) {
+                const listItems = message.map(point => `<li>${point}</li>`).join('');
+                messageElement.innerHTML = `<ul>${listItems}</ul>`;
+            } else {
+                messageElement.textContent = message;
+            }
+
+            chatbotBody.appendChild(messageElement);
+            chatbotBody.scrollTop = chatbotBody.scrollHeight;
+        }
+
+        // Function to handle form submission
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            const userInput = document.getElementById('chatbotInput');
+            const userMessage = userInput.value.trim();
+
+            if (userMessage) {
+                appendMessage('user', userMessage);
+                userInput.value = '';
+
+                // Simulate typing indicator
+                const typingIndicator = document.createElement('div');
+                typingIndicator.classList.add('chat-message', 'bot');
+                typingIndicator.innerHTML = '<i class="fas fa-ellipsis-h"></i>';
+                chatbotBody.appendChild(typingIndicator);
+                chatbotBody.scrollTop = chatbotBody.scrollHeight;
+
+                try {
+                    // Send to your Flask backend
+                    const response = await fetch('/leg_inp', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `legal_bot=${encodeURIComponent(userMessage)}`
+                    });
+
+                    const data = await response.json();
+
+                    // Remove typing indicator
+                    chatbotBody.removeChild(typingIndicator);
+
+                    // Display response
+                    if (Array.isArray(data.response)) {
+                        appendMessage('bot', data.response, true);
+                    } else {
+                        appendMessage('bot', data.response);
+                    }
+                } catch (error) {
+                    chatbotBody.removeChild(typingIndicator);
+                    appendMessage('bot', "Sorry, I'm having trouble connecting. Please try again later.");
+                    console.error("Error:", error);
+                }
+            }
+        }
+
+        // Event listeners
+        document.getElementById('legalbotForm').addEventListener('submit', handleFormSubmit);
+
+        // Allow sending with Enter key
+        document.getElementById('chatbotInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleFormSubmit(e);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tejas Networks - Expert Q&A</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            overflow-x: hidden;
+            color: #fff;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            min-height: 100vh;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 30px 0 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            order: 1;
+        }
+
+        .nav-buttons a {
+            padding: 8px 16px;
+            background: rgba(76, 175, 80, 0.2);
+            border-radius: 6px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .nav-buttons a:hover {
+            background: rgba(76, 175, 80, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav-buttons a i {
+            font-size: 12px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            order: 2;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            padding: 20px 0 40px;
+        }
+
+        .question-form, .pending-questions {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #4CAF50;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #4CAF50;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='rgba(255,255,255,0.7)'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 14px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #4CAF50;
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: #3e8e41;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .question-card {
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 15px;
+            border-left: 3px solid #4CAF50;
+            transition: transform 0.3s ease;
+        }
+
+        .question-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .question-card h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .question-meta {
+            font-size: 13px;
+            opacity: 0.8;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .question-card p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+                padding: 20px 0 15px;
+            }
+
+            .nav-buttons {
+                order: 1;
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .logo {
+                order: 2;
+                text-align: left;
+                font-size: 22px;
+            }
+
+            .main-content {
+                flex-direction: column;
+                gap: 20px;
+                padding: 15px 0 30px;
+            }
+
+            .question-form, .pending-questions {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-buttons {
+                flex-wrap: wrap;
+            }
+
+            .nav-buttons a {
+                flex-grow: 1;
+                justify-content: center;
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="particles-js"></div>
+
+<div class="container">
+    <header>
+        <div class="nav-buttons">
+            <a href="/"><i class="fas fa-home"></i> Home</a>
+            <a href="/answered_questions"><i class="fas fa-question-circle"></i> Answered</a>
+            <a href="/admin_logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+
+            <p>{{user}}</p>
+            <br>
+            <p>{{role}}</p>
+            <br>
+            <p>{{email}}</p>
+        </div>
+        <div class="logo">Tejas Networks Expert Q&A</div>
+    </header>
+
+    <div class="main-content">
+        <div class="question-form">
+            <h2 class="section-title">Submit Your Answer</h2>
+            <form action="/question_submit" method="POST" id="answerForm">
+                <div class="form-group">
+                    <label for="email">Your Email</label>
+                    <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="role">Your Role</label>
+                    <select id="role" name="role" class="form-control" required>
+                        <option value="" disabled selected>Select your role</option>
+                        <option value="Trainer">Trainer</option>
+                        <option value="Subject matter expert">Subject Matter Expert</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="question">Enter the question</label>
+                    <input type="text" name="question" id="question" class="form-control" placeholder="Enter the question" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="answer">Your Answer</label>
+                    <textarea id="answer" name="answer" class="form-control" placeholder="Provide detailed answer..." required></textarea>
+                </div>
+                <button type="submit" class="btn">Submit Answer</button>
+            </form>
+        </div>
+
+        <div class="pending-questions">
+            <h2 class="section-title">Pending Questions</h2>
+            {% for question in questions %}
+            <div class="question-card">
+                <div class="question-meta">
+                    From: {{ question[3] }} ({{ question[1] }})<br>
+                    Date: {{ question[2] }}
+                </div>
+                <h4>{{ question[0] }}</h4>
+            </div>
+            {% else %}
+            <div class="no-questions">
+                <p>All questions have been answered!</p>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+    particlesJS("particles-js", {
+        particles: {
+            number: { value: 60, density: { enable: true, value_area: 800 } },
+            color: { value: "#ffffff" },
+            shape: { type: "circle" },
+            opacity: { value: 0.4 },
+            size: { value: 3, random: true },
+            line_linked: {
+                enable: true,
+                distance: 120,
+                color: "#ffffff",
+                opacity: 0.2,
+                width: 1
+            },
+            move: {
+                enable: true,
+                speed: 1.5,
+                direction: "none",
+                random: true,
+                straight: false,
+                out_mode: "out"
+            }
+        },
+        interactivity: {
+            detect_on: "canvas",
+            events: {
+                onhover: { enable: true, mode: "grab" },
+                resize: true
+            },
+            modes: {
+                grab: { distance: 120, line_linked: { opacity: 0.3 } }
+            }
+        },
+        retina_detect: true
+    });
+</script>
+
+</body>
+</html>
